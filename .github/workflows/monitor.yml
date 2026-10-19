@@ -1,1 +1,22 @@
-59055669-8b70b259-ed70-4e64-9ff6-63c8e65bb7f8
+name: Production Monitor
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cài đặt Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
+      - name: Đăng nhập Postman
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+
+      - name: Chạy kịch bản Monitor trực tiếp từ Cloud
+        run: |
+          postman collection run "59055669-8b70b259-ed70-4e64-9ff6-63c8e65bb7f8"
